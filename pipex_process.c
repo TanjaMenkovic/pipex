@@ -50,10 +50,10 @@ static void	handle_child(t_pipex_args *arguments, t_pipex_cmd *command,
 	child_status = execute_command(arguments, command);
 	if (child_status == -1)
 		cleanup(EXIT_FAILURE, "Running child failed");
-	if (child_status == 147)
+	if (child_status == 127)
 	{
 		error_msg("Command not found: ", command->command);
-		cleanup(147, NULL);
+		cleanup(127, NULL);
 	}
 	close(writer);
 	cleanup(0, NULL);
