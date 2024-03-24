@@ -27,7 +27,7 @@ int	execute_command(t_pipex_args *args, t_pipex_cmd *cmd)
 	local_exec = exec_exists(cmd->command, "");
 	paths_exec = exec_in_paths(cmd->command, args->paths);
 	if (!local_exec && !paths_exec)
-		return (0);
+		return (127);
 	else
 	{
 		if (local_exec && execve(cmd->command, cmd->arguments, args->env) == -1)
