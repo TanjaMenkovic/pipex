@@ -29,10 +29,20 @@ static void	init_else(t_pipex_args *arguments, int argc,
 	*offset = 2;
 }
 
-static void	init_both(t_pipex_args *arguments, int argc,
-		char **argv)
+static int	init_both(t_pipex_args *arguments, int argc,
+		char **argv, int *offset)
 {
-	
+	if (ft_strcmp("heredoc", argv[1]) == 0)
+	{
+		if (argc < 7)
+			return (-1);
+		init_heredoc(arguments, argc, argv, offset);
+	}
+	else
+		init_else(arguments, argc, argv, offset);
+	arguments->output_file = ft_strdup(argv[argc - 1]);
+	arguments->commands = (char **)malloc(sizeof(char *) * arguments->size);
+	return (0);
 }
 
 static int	init_args(t_pipex_args *arguments, int argc,
@@ -43,16 +53,8 @@ static int	init_args(t_pipex_args *arguments, int argc,
 
 	if (argc < 5)
 		return (-1);
-	if (ft_strcmp("heredoc", argv[1]) == 0)
-	{
-		if (argc < 7)
-			return (-1);
-		init_heredoc(arguments, argc, argv, &offset);
-	}
-	else
-		init_else(arguments, argc, argv, &offset);
-	arguments->output_file = ft_strdup(argv[argc - 1]);
-	arguments->commands = (char **)malloc(sizeof(char *) * arguments->size);
+	if (init_both(arguments, argc, argv, &offset) == -1)
+		return (-1);
 	index = offset;
 	while (index < (arguments->size + offset))
 	{
